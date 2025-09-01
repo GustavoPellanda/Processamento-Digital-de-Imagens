@@ -12,7 +12,7 @@ import numpy as np
 import cv2
 import time
 
-INPUT_IMAGE = 'b01.bmp'  # Altere para o caminho da sua imagem
+INPUT_IMAGE = 'b01.bmp'
 WINDOW_SIZE = (15, 15)  # (largura, altura) - deve ser ímpar
 
 class FiltroIngenuo:
@@ -285,4 +285,5 @@ Subtrai o valor de cada pixel processado pelo OpenCV pelo pixel de mesma posiç�
 cada um dos algoritmos e exibe a maior diferença absoluta encontrada entre todos os pixels da imagem. 
 Diferenças de 1 ou 2 são consideradas normais (resultado de arredondamentos numéricos). 
 Diferenças acima de 3 podem indicar erros significativos na implementação dos algoritmos.
+
 """
