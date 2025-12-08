@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Gabarito 5 Alternativas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .gabarito-box {
+            width: 450px; /* Mais largo para caber A-E */
+            border: 5px solid black; /* Borda grossa para facilitar detecção */
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .linha {
+            display: flex;
+            align-items: center;
+            height: 40px;
+        }
+
+        .numero {
+            font-weight: bold;
+            font-size: 24px;
+            width: 50px;
+            text-align: right;
+            margin-right: 50px; /* "Rio" de segurança */
+        }
+
+        .opcoes {
+            display: flex;
+            gap: 25px; /* Espaço entre bolinhas */
+        }
+
+        .bolinha {
+            width: 35px;
+            height: 35px;
+            border: 2px solid black;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 16px;
+            font-weight: bold;
+            color: #000;
+        }
+
+        @media print {
+            body { -webkit-print-color-adjust: exact; }
+            .gabarito-box { border: 5px solid black !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="gabarito-box">
+        <div class="linha"><div class="numero">1</div><div class="opcoes"><div class="bolinha">A</div><div class="bolinha">B</div><div class="bolinha">C</div><div class="bolinha">D</div><div class="bolinha">E</div></div></div>
+        <div class="linha"><div class="numero">2</div><div class="opcoes"><div class="bolinha">A</div><div class="bolinha">B</div><div class="bolinha">C</div><div class="bolinha">D</div><div class="bolinha">E</div></div></div>
+        <div class="linha"><div class="numero">3</div><div class="opcoes"><div class="bolinha">A</div><div class="bolinha">B</div><div class="bolinha">C</div><div class="bolinha">D</div><div class="bolinha">E</div></div></div>
+        <div class="linha"><div class="numero">4</div><div class="opcoes"><div class="bolinha">A</div><div class="bolinha">B</div><div class="bolinha">C</div><div class="bolinha">D</div><div class="bolinha">E</div></div></div>
+        <div class="linha"><div class="numero">5</div><div class="opcoes"><div class="bolinha">A</div><div class="bolinha">B</div><div class="bolinha">C</div><div class="bolinha">D</div><div class="bolinha">E</div></div></div>
+        <div class="linha"><div class="numero">6</div><div class="opcoes"><div class="bolinha">A</div><div class="bolinha">B</div><div class="bolinha">C</div><div class="bolinha">D</div><div class="bolinha">E</div></div></div>
+        <div class="linha"><div class="numero">7</div><div class="opcoes"><div class="bolinha">A</div><div class="bolinha">B</div><div class="bolinha">C</div><div class="bolinha">D</div><div class="bolinha">E</div></div></div>
+        <div class="linha"><div class="numero">8</div><div class="opcoes"><div class="bolinha">A</div><div class="bolinha">B</div><div class="bolinha">C</div><div class="bolinha">D</div><div class="bolinha">E</div></div></div>
+        <div class="linha"><div class="numero">9</div><div class="opcoes"><div class="bolinha">A</div><div class="bolinha">B</div><div class="bolinha">C</div><div class="bolinha">D</div><div class="bolinha">E</div></div></div>
+        <div class="linha"><div class="numero">10</div><div class="opcoes"><div class="bolinha">A</div><div class="bolinha">B</div><div class="bolinha">C</div><div class="bolinha">D</div><div class="bolinha">E</div></div></div>
+    </div>
+
+</body>
+</html>
