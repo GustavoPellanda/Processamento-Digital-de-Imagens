@@ -22,13 +22,14 @@ import glob
 # CONFIGURAÇÕES DO PIPELINE
 
 PASTA_IMAGENS = "fotos"  # Pasta onde estão as provas dos alunos
+PASTA_SAIDA = "saida"    # Nova pasta para salvar os resultados
 ARQUIVO_MESTRE = "Gabarito_modelo.bmp"  # O gabarito gabarito correto
 WIDTH_WORK = 450
 HEIGHT_WORK = 650
 
 # DEBUG
 # Mude para True para ver a imagem na tela quando ocorrer um erro de detecção
-VISUALIZAR_ERROS = True
+VISUALIZAR_ERROS = False
 
 
 # ------------------------------------------------------------------
@@ -102,8 +103,8 @@ def detectar_alinhar(img):
     bordas = cv2.dilate(bordas, kernel, iterations=2)
     bordas = cv2.erode(bordas, kernel, iterations=1)
 
-    cv2.imshow("Canny", bordas)
-    cv2.waitKey(0)
+    #cv2.imshow("Canny", bordas)
+    #cv2.waitKey(0)
 
     # contornos
     contornos, _ = cv2.findContours(bordas, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -140,14 +141,14 @@ def detectar_alinhar(img):
     imagem = imgoriginal.copy()
     retan_int = retan.astype(int)
     cv2.polylines(imagem, [retan_int], True, (0, 0, 255), 3)
-    cv2.imshow("retangulo", imagem)
-    cv2.waitKey(0)
+    #cv2.imshow("retangulo", imagem)
+    #cv2.waitKey(0)
 
     # homografia e redimensiona
     warp = warp_quadrilateral(imgoriginal, retan, (WIDTH_WORK, HEIGHT_WORK))
-    cv2.imshow("Warp", warp)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    #cv2.imshow("Warp", warp)
+    #cv2.waitKey(0)
+    #cv2.destroyAllWindows()
 
     return warp
 
@@ -192,10 +193,16 @@ def gerar_zonas_de_acerto_perfeitas(mask_mestre_raw):
     return zonas_perfeitas
 
 
-def calcular_nota(mask_mestre_zones, mask_aluno):
-    """Calcula a nota baseada na colisão de centróides."""
+def calcular_nota(mask_mestre_zones, mask_aluno, img_visual):
+    """
+    Calcula a nota baseada na colisão de centróides.
+    Adicionado parametro img_visual para desenhar o resultado.
+    """
     h, w = mask_aluno.shape
     step_y = h // 10
+    
+    # Copia a imagem original alinhada para desenhar o gabarito final
+    img_resultado = img_visual.copy()
 
     contours_aluno, _ = cv2.findContours(
         mask_aluno, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE
@@ -220,8 +227,12 @@ def calcular_nota(mask_mestre_zones, mask_aluno):
         # Teste de colisão
         if mask_mestre_zones[cY, cX] == 255:
             resultados[idx_questao].append("C")
+            # Desenha VERDE para acerto na imagem de saída
+            cv2.circle(img_resultado, (cX, cY), 7, (0, 255, 0), -1)
         else:
             resultados[idx_questao].append("E")
+            # Desenha VERMELHO para erro na imagem de saída
+            cv2.circle(img_resultado, (cX, cY), 7, (0, 0, 255), -1)
 
     nota = 0
     anuladas = 0
@@ -233,7 +244,7 @@ def calcular_nota(mask_mestre_zones, mask_aluno):
         elif ("C" in resps and "E" in resps) or len(resps) > 1:
             anuladas += 1
 
-    return nota, anuladas
+    return nota, anuladas, img_resultado
 
 
 # --------------------------------------------------------------------------
@@ -242,8 +253,13 @@ def calcular_nota(mask_mestre_zones, mask_aluno):
 
 def main():
     print(f"Processando imagens da pasta " "/" "fotos")
+    
+    # Criar pasta de saída se não existir
+    if not os.path.exists(PASTA_SAIDA):
+        os.makedirs(PASTA_SAIDA)
+        print(f"Pasta de saída '{PASTA_SAIDA}' criada.")
 
-    # 1. Carregar e Preparar o Gabarito Mestre
+    # Carregar e Preparar o Gabarito Mestre
     if not os.path.exists(ARQUIVO_MESTRE):
         print(f"ERRO: Gabarito Mestre '{ARQUIVO_MESTRE}' não encontrado.")
         return
@@ -260,9 +276,13 @@ def main():
 
     mask_m_raw = processar_mascara_limpa(warp_m)
     mask_master_zones = gerar_zonas_de_acerto_perfeitas(mask_m_raw)
-    print(">>> Gabarito Mestre Processado com Sucesso.")
+    
+    # SALVAR GABARITO MESTRE (MÁSCARA DE ALVOS) NA PASTA DE SAÍDA
+    caminho_mestre_out = os.path.join(PASTA_SAIDA, "Mascara_Mestre_Alvos.png")
+    cv2.imwrite(caminho_mestre_out, mask_master_zones)
+    print(f">>> Gabarito Mestre Processado e salvo em: {caminho_mestre_out}")
 
-    # 2. Ler pasta de imagens
+    # Ler pasta de imagens
     # Pega extensões comuns
     lista_arquivos = []
     for ext in ["*.png", "*.jpg", "*.jpeg", "*.bmp"]:
@@ -272,7 +292,7 @@ def main():
     print(f"{'ARQUIVO':<40} | {'NOTA':<10} | {'STATUS'}")
     print("-" * 70)
 
-    # 3. Loop de Processamento
+    # Loop de Processamento
     for arquivo_path in lista_arquivos:
         nome_arquivo = os.path.basename(arquivo_path)
 
@@ -292,21 +312,26 @@ def main():
                 )
                 continue
 
-            cv2.imshow(f"{nome_arquivo} - alinhamento", warp_a)
-            cv2.waitKey(0)
+            #cv2.imshow(f"{nome_arquivo} - alinhamento", warp_a)
+            #cv2.waitKey(0)
 
-            # C. Processar Máscara
+            # Processar Máscara
             mask_a_raw = processar_mascara_limpa(warp_a)
 
-            # 🟦 Mostrar máscara do aluno
-            cv2.imshow(f"{nome_arquivo} - mascara", mask_a_raw)
-            cv2.waitKey(0)
+            # Mostrar máscara do aluno
+            #cv2.imshow(f"{nome_arquivo} - mascara", mask_a_raw)
+            #cv2.waitKey(0)
 
-            # D. Calcular Nota
-            nota, anuladas = calcular_nota(mask_master_zones, mask_a_raw)
+            # Calcular Nota
+            nota, anuladas, img_resultado_visual = calcular_nota(mask_master_zones, mask_a_raw, warp_a)
+            
+            # SALVAR RESULTADO VISUAL DO ALUNO NA PASTA DE SAÍDA
+            nome_saida = f"resultado_{nome_arquivo}"
+            caminho_saida = os.path.join(PASTA_SAIDA, nome_saida)
+            cv2.imwrite(caminho_saida, img_resultado_visual)
 
             msg_anulada = f"({anuladas} anuladas)" if anuladas > 0 else ""
-            print(f"{nome_arquivo:<40} | {nota:>2}/10      | Sucesso {msg_anulada}")
+            print(f"{nome_arquivo:<40} | {nota:>2}/10       | Sucesso {msg_anulada}")
 
         except Exception as e:
             print(f"{nome_arquivo:<40} | -          | ERRO CRÍTICO: {e}")
