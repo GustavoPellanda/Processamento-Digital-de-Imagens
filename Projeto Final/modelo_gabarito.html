@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Gabarito 5 Alternativas</title>
+    <title>Gabarito com Marcadores</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -11,21 +11,48 @@
             align-items: center;
             height: 100vh;
             margin: 0;
+            background-color: #f0f0f0; /* Fundo cinza na tela para destacar o papel */
+        }
+
+        .folha-papel {
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
 
         .gabarito-box {
-            width: 450px; /* Mais largo para caber A-E */
-            border: 5px solid black; /* Borda grossa para facilitar detecção */
-            padding: 20px;
+            position: relative; /* Necessário para posicionar os marcadores */
+            width: 450px;
+            /* Borda fina apenas para estética humana, não usada pelo CV */
+            border: 1px solid #ccc; 
+            padding: 50px 30px; /* Mais espaço no topo/base para os marcadores */
             display: flex;
             flex-direction: column;
             gap: 15px;
         }
 
+        /* --- NOVOS MARCADORES (QUADRADOS) --- */
+        .marcador {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background-color: black;
+            /* Garante que o quadrado preto saia na impressão */
+            -webkit-print-color-adjust: exact; 
+            print-color-adjust: exact;
+        }
+
+        .top-left { top: 15px; left: 15px; }
+        .top-right { top: 15px; right: 15px; }
+        .bottom-left { bottom: 15px; left: 15px; }
+        .bottom-right { bottom: 15px; right: 15px; }
+        /* ------------------------------------ */
+
         .linha {
             display: flex;
             align-items: center;
             height: 40px;
+            border-bottom: 0px dashed #eee; /* Guia visual leve */
         }
 
         .numero {
@@ -33,12 +60,12 @@
             font-size: 24px;
             width: 50px;
             text-align: right;
-            margin-right: 50px; /* "Rio" de segurança */
+            margin-right: 50px;
         }
 
         .opcoes {
             display: flex;
-            gap: 25px; /* Espaço entre bolinhas */
+            gap: 25px;
         }
 
         .bolinha {
@@ -55,24 +82,40 @@
         }
 
         @media print {
-            body { -webkit-print-color-adjust: exact; }
-            .gabarito-box { border: 5px solid black !important; }
+            body { 
+                background-color: white; 
+                margin: 0;
+            }
+            .folha-papel {
+                box-shadow: none;
+                padding: 0;
+            }
+            .gabarito-box {
+                border: none; /* Remove a borda cinza na impressão se quiser */
+            }
         }
     </style>
 </head>
 <body>
 
-    <div class="gabarito-box">
-        <div class="linha"><div class="numero">1</div><div class="opcoes"><div class="bolinha">A</div><div class="bolinha">B</div><div class="bolinha">C</div><div class="bolinha">D</div><div class="bolinha">E</div></div></div>
-        <div class="linha"><div class="numero">2</div><div class="opcoes"><div class="bolinha">A</div><div class="bolinha">B</div><div class="bolinha">C</div><div class="bolinha">D</div><div class="bolinha">E</div></div></div>
-        <div class="linha"><div class="numero">3</div><div class="opcoes"><div class="bolinha">A</div><div class="bolinha">B</div><div class="bolinha">C</div><div class="bolinha">D</div><div class="bolinha">E</div></div></div>
-        <div class="linha"><div class="numero">4</div><div class="opcoes"><div class="bolinha">A</div><div class="bolinha">B</div><div class="bolinha">C</div><div class="bolinha">D</div><div class="bolinha">E</div></div></div>
-        <div class="linha"><div class="numero">5</div><div class="opcoes"><div class="bolinha">A</div><div class="bolinha">B</div><div class="bolinha">C</div><div class="bolinha">D</div><div class="bolinha">E</div></div></div>
-        <div class="linha"><div class="numero">6</div><div class="opcoes"><div class="bolinha">A</div><div class="bolinha">B</div><div class="bolinha">C</div><div class="bolinha">D</div><div class="bolinha">E</div></div></div>
-        <div class="linha"><div class="numero">7</div><div class="opcoes"><div class="bolinha">A</div><div class="bolinha">B</div><div class="bolinha">C</div><div class="bolinha">D</div><div class="bolinha">E</div></div></div>
-        <div class="linha"><div class="numero">8</div><div class="opcoes"><div class="bolinha">A</div><div class="bolinha">B</div><div class="bolinha">C</div><div class="bolinha">D</div><div class="bolinha">E</div></div></div>
-        <div class="linha"><div class="numero">9</div><div class="opcoes"><div class="bolinha">A</div><div class="bolinha">B</div><div class="bolinha">C</div><div class="bolinha">D</div><div class="bolinha">E</div></div></div>
-        <div class="linha"><div class="numero">10</div><div class="opcoes"><div class="bolinha">A</div><div class="bolinha">B</div><div class="bolinha">C</div><div class="bolinha">D</div><div class="bolinha">E</div></div></div>
+    <div class="folha-papel">
+        <div class="gabarito-box">
+            <div class="marcador top-left"></div>
+            <div class="marcador top-right"></div>
+            <div class="marcador bottom-left"></div>
+            <div class="marcador bottom-right"></div>
+
+            <div class="linha"><div class="numero">1</div><div class="opcoes"><div class="bolinha">A</div><div class="bolinha">B</div><div class="bolinha">C</div><div class="bolinha">D</div><div class="bolinha">E</div></div></div>
+            <div class="linha"><div class="numero">2</div><div class="opcoes"><div class="bolinha">A</div><div class="bolinha">B</div><div class="bolinha">C</div><div class="bolinha">D</div><div class="bolinha">E</div></div></div>
+            <div class="linha"><div class="numero">3</div><div class="opcoes"><div class="bolinha">A</div><div class="bolinha">B</div><div class="bolinha">C</div><div class="bolinha">D</div><div class="bolinha">E</div></div></div>
+            <div class="linha"><div class="numero">4</div><div class="opcoes"><div class="bolinha">A</div><div class="bolinha">B</div><div class="bolinha">C</div><div class="bolinha">D</div><div class="bolinha">E</div></div></div>
+            <div class="linha"><div class="numero">5</div><div class="opcoes"><div class="bolinha">A</div><div class="bolinha">B</div><div class="bolinha">C</div><div class="bolinha">D</div><div class="bolinha">E</div></div></div>
+            <div class="linha"><div class="numero">6</div><div class="opcoes"><div class="bolinha">A</div><div class="bolinha">B</div><div class="bolinha">C</div><div class="bolinha">D</div><div class="bolinha">E</div></div></div>
+            <div class="linha"><div class="numero">7</div><div class="opcoes"><div class="bolinha">A</div><div class="bolinha">B</div><div class="bolinha">C</div><div class="bolinha">D</div><div class="bolinha">E</div></div></div>
+            <div class="linha"><div class="numero">8</div><div class="opcoes"><div class="bolinha">A</div><div class="bolinha">B</div><div class="bolinha">C</div><div class="bolinha">D</div><div class="bolinha">E</div></div></div>
+            <div class="linha"><div class="numero">9</div><div class="opcoes"><div class="bolinha">A</div><div class="bolinha">B</div><div class="bolinha">C</div><div class="bolinha">D</div><div class="bolinha">E</div></div></div>
+            <div class="linha"><div class="numero">10</div><div class="opcoes"><div class="bolinha">A</div><div class="bolinha">B</div><div class="bolinha">C</div><div class="bolinha">D</div><div class="bolinha">E</div></div></div>
+        </div>
     </div>
 
 </body>
